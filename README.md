@@ -7,7 +7,7 @@ Alles zit in één bestand: `index.html` (lettertypes en beelden zitten erin). W
 ## Sneltoetsen
 - `1`–`9` scène: nu op de decks · line-up · prijslijst · BACO · marquee · logo · halftone-logo · glitch · visualizer
 - `W` speakermuur · `N` nacho's · `C` countdown naar volgende DJ
-- `U` tunnel · `G` rum-glas · `V` vinyl · `R` bolletjes-regen · `B` lichtbundels
+- `U` tunnel · `G` rum-glas · `V` vinyl · `B` lichtbundels
 - `←` `→` vorige/volgende · `spatie` pauze · `F` fullscreen
 - `M` microfoon (reageert op de bas) · `T` tap tempo
 - `D` demo-tijd door de nacht · `0` echte tijd · `H` hulp
