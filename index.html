@@ -91,12 +91,12 @@ body.nocursor{cursor:none}
 .tip small{display:block;font-family:Bebas,Anton;font-size:44px;letter-spacing:3px;margin-bottom:6px}
 
 /* ---------- BACO ---------- */
-#s-baco{background:var(--neon);color:var(--ink)}
-#s-baco .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.16) 30%,transparent 32%);background-size:26px 26px;-webkit-mask-image:radial-gradient(ellipse at 70% 50%,#000,transparent 75%);mask-image:radial-gradient(ellipse at 70% 50%,#000,transparent 75%)}
-#s-baco .big{left:90px;top:40px;font-size:560px;letter-spacing:-4px;z-index:2}
+#s-baco{color:var(--cream)}
+#s-baco .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(224,255,0,.10) 30%,transparent 32%);background-size:26px 26px;-webkit-mask-image:radial-gradient(ellipse at 70% 50%,#000,transparent 75%);mask-image:radial-gradient(ellipse at 70% 50%,#000,transparent 75%)}
+#s-baco .big{left:90px;top:40px;font-size:560px;letter-spacing:-4px;z-index:2;color:var(--neon)}
 #s-baco .sub{left:110px;top:640px;font-size:96px;font-family:Bebas,Anton;letter-spacing:4px;z-index:2}
 #s-baco .sub2{left:110px;top:760px;font-size:60px;font-family:Bebas,Anton;letter-spacing:4px;opacity:.7;z-index:2}
-.sticker{position:absolute;left:1500px;top:640px;width:300px;height:300px;border-radius:50%;background:var(--ink);color:var(--neon);display:grid;place-items:center;font-size:150px;z-index:4}
+.sticker{position:absolute;left:1500px;top:640px;width:300px;height:300px;border-radius:50%;background:var(--neon);color:var(--ink);display:grid;place-items:center;font-size:150px;z-index:4}
 .sticker span{display:block;transform:rotate(-12deg) scale(calc(1 + var(--beat) * .04))}
 #s-baco.on .sticker{animation:slam .7s .5s cubic-bezier(.2,1.6,.4,1) both}
 
@@ -162,7 +162,7 @@ body.nocursor{cursor:none}
 #stage.light #logo{filter:brightness(0) opacity(.85)}
 #stage.nologo #logo{opacity:0}
 
-#wipe{position:absolute;top:-10%;left:0;width:130%;height:120%;background:var(--neon);z-index:45;transform:translateX(-110%) skewX(-12deg);pointer-events:none}
+#wipe{position:absolute;top:-10%;left:0;width:130%;height:120%;background:#0d0d0d;border-left:14px solid var(--neon);box-shadow:-40px 0 80px rgba(0,0,0,.6);z-index:45;transform:translateX(-110%) skewX(-12deg);pointer-events:none}
 
 /* overlays (outside scaled stage text sizes in px of stage) */
 #toast{position:absolute;left:50%;top:60px;transform:translateX(-50%);background:var(--ink);border:3px solid var(--neon);color:var(--cream);font-family:Bebas,Anton;letter-spacing:3px;font-size:44px;padding:16px 30px 10px;z-index:60;opacity:0;transition:opacity .3s;white-space:nowrap}
@@ -515,7 +515,7 @@ function wipeTo(name){
 function setScene(name){
   document.querySelectorAll('.scene').forEach(s => s.classList.remove('on'));
   const el = $('#s-' + name); void el.offsetWidth; el.classList.add('on');
-  stage.classList.toggle('light', name === 'baco');
+  stage.classList.toggle('light', false);
   stage.classList.toggle('nologo', name === 'logo' || name === 'halftone');
   current = name; history.push(name); if (history.length > 6) history.shift();
   sinceNow = name === 'now' ? 0 : sinceNow + 1;
@@ -684,7 +684,7 @@ function loop(t){
   beat *= Math.exp(-dt/150); snare *= Math.exp(-dt/90);
   root.style.setProperty('--beat', beat.toFixed(3));
   root.style.setProperty('--snare', snare.toFixed(3));
-  if (['now','lineup','prijs','logo','countdown','nachos','glitch'].includes(current)) drawBg(t); else cx.clearRect(0,0,1920,1080);
+  if (['now','lineup','prijs','logo','countdown','nachos','glitch','baco'].includes(current)) drawBg(t); else cx.clearRect(0,0,1920,1080);
   if (current === 'halftone') drawHT(t);
   if (current === 'viz') drawViz(t);
   if (current === 'glitch') tickGlitch(t);
