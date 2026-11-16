@@ -14,4 +14,4 @@ Alles zit in één bestand: `index.html` (lettertypes en beelden zitten erin). W
 ## Aanpassen
 Zoek in `index.html` naar `AANPASSEN`: line-up, prijzen, duur en kans per scène staan daar.
 
-De volgorde is willekeurig en wordt drukker naarmate de avond vordert. 5 minuten voor elke DJ-wissel komt de countdown vanzelf.
+De volgorde is willekeurig en vooral visuals; prijslijst, BACO, nacho's en line-up komen hooguit 1 keer per 7 scènes. Het wordt drukker naarmate de avond vordert. 5 minuten voor elke DJ-wissel komt de countdown vanzelf.
