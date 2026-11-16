@@ -55,7 +55,7 @@ body.nocursor{cursor:none}
 #s-title .t4{left:118px;top:565px;font-size:76px;z-index:5;font-family:Bebas,Anton;letter-spacing:2px}
 
 /* ---------- NOW ---------- */
-#s-now .stack{position:absolute;left:130px;top:0;bottom:0;width:1120px;display:flex;flex-direction:column;justify-content:center;z-index:5}
+#s-now .stack{position:absolute;left:130px;top:0;bottom:0;width:980px;display:flex;flex-direction:column;justify-content:center;z-index:5}
 #s-now .label{font-size:58px;color:var(--neon);display:flex;align-items:center;gap:24px;font-family:Bebas,Anton;letter-spacing:4px}
 .dot{width:30px;height:30px;border-radius:50%;background:var(--neon);box-shadow:0 0 30px var(--neon);animation:blink 1.4s ease-in-out infinite}
 @keyframes blink{50%{opacity:.2}}
@@ -75,6 +75,9 @@ body.nocursor{cursor:none}
 .djcard .ph::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.55) 28%,transparent 31%);background-size:7px 7px;mix-blend-mode:multiply;opacity:.55}
 .djcard .tag{position:absolute;left:-26px;bottom:-34px;background:var(--neon);color:var(--ink);font-size:58px;padding:14px 26px 8px;transform:rotate(-5deg);white-space:nowrap}
 .djcard.hide{display:none}
+.djcard .tilt{position:relative;transform:rotate(-3deg)}
+.djcard.now{left:1170px;top:270px;width:560px;z-index:3}
+.djcard.now .tag{left:auto;right:-30px;bottom:auto;top:-30px;transform:rotate(6deg)}
 /* ---------- LINE-UP ---------- */
 #s-lineup h1{position:absolute;left:110px;top:55px;margin:0;font-size:210px;color:var(--neon);font-weight:400}
 .rows{position:absolute;left:130px;right:130px;top:380px;display:flex;justify-content:space-between}
@@ -200,11 +203,11 @@ body.nocursor{cursor:none}
 
   <!-- NOW PLAYING -->
   <section class="scene" id="s-now">
-    <div class="obj slider" id="now-speaker" style="left:1350px;top:110px;width:520px;--r:7deg"><div class="fl" style="--fd:7s"><img data-img="speaker" style="--amt:.09" alt=""></div></div>
-    <div class="obj drop" style="left:1190px;top:660px;width:250px;--r:-9deg;--d:.4s"><div class="fl"><img data-img="glass" style="--amt:.03" alt=""></div></div>
+    <div class="obj slider" id="now-speaker" style="left:1450px;top:40px;width:460px;--r:9deg;z-index:1"><div class="fl" style="--fd:7s"><img data-img="speaker" style="--amt:.09" alt=""></div></div>
+    <div class="djcard now slider" id="now-card" style="--d:.15s"><div class="fl" style="--fd:6s"><div class="tilt"><div class="ph"><img id="now-photo" alt=""></div><div class="tag" id="now-tag">ON AIR</div></div></div></div>
     <div class="stack">
       <div class="label rise"><span class="dot"></span><span id="now-label">NU OP DE DECKS</span></div>
-      <div class="name slam" style="--d:.15s"><span class="thump" id="now-name" data-fit="1120">DJ JAPIE</span></div>
+      <div class="name slam" style="--d:.15s"><span class="thump" id="now-name" data-fit="980">DJ JAPIE</span></div>
       <div class="slot rise" style="--d:.35s" id="now-slot">22:00 – 23:30</div>
       <div class="bar rise" style="--d:.45s" id="now-bar"><i id="now-prog"></i></div>
       <div class="next rise" style="--d:.6s" id="now-next"><small>NEXT UP</small><b id="now-next-name">DJ ROBIJNTJE · 23:30</b></div>
@@ -272,7 +275,7 @@ body.nocursor{cursor:none}
 
   <!-- COUNTDOWN -->
   <section class="scene" id="s-countdown">
-    <div class="djcard slider" id="cd-card" style="--d:.1s"><div class="fl" style="--fd:6s"><div class="ph"><img id="cd-photo" alt=""></div><div class="tag">NEXT UP</div></div></div>
+    <div class="djcard slider" id="cd-card" style="--d:.1s"><div class="fl" style="--fd:6s"><div class="tilt"><div class="ph"><img id="cd-photo" alt=""></div><div class="tag">NEXT UP</div></div></div></div>
     <div class="stack">
       <div class="lbl rise" id="cd-lbl">NEXT UP</div>
       <div class="who slam" style="--d:.1s"><span id="cd-who" data-fit="1080">DJ MARS</span></div>
@@ -485,6 +488,10 @@ function updateLive(){
     name = 'MERCI & SLAAPWEL'; slot = 'TOT DE VOLGENDE!';
   }
   if (name !== lastName){ nameEl.textContent = name; fitText(nameEl); lastName = name; }
+  const showSet = cur || (r < START ? SETS[0] : null), ph = showSet && IMG[showSet.photo];
+  $('#now-card').classList.toggle('hide', !ph);
+  $('#now-tag').textContent = cur ? 'ON AIR' : 'OM ' + SETS[0].a;
+  if (ph && $('#now-photo').dataset.k !== showSet.photo){ $('#now-photo').src = ph; $('#now-photo').dataset.k = showSet.photo; }
 
   $('#now-slot').textContent = slot;
   $('#now-bar').style.display = prog === null ? 'none' : '';
