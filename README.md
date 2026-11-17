@@ -16,3 +16,8 @@ Alles zit in één bestand: `index.html` (lettertypes en beelden zitten erin). W
 Zoek in `index.html` naar `AANPASSEN`: line-up, prijzen, duur en kans per scène staan daar.
 
 De volgorde is willekeurig en vooral visuals; prijslijst, BACO, nacho's en line-up komen hooguit 1 keer per 7 scènes. Het wordt drukker naarmate de avond vordert. 5 minuten voor elke DJ-wissel komt de countdown vanzelf.
+
+## Nieuw
+- `A` Affiche in beweging · `S` Halftone-speaker · `O` Spiegelbal
+- `I` DJ-intro (komt automatisch bij elke DJ-wissel) · `L` Last call (komt automatisch 03:10–03:30)
+- Na 04:00 blijft alles gewoon draaien (overtime: Kikker blijft "on air").
