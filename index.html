@@ -396,7 +396,6 @@ body.nocursor{cursor:none}
   </section>
 
   <!-- SPEAKER + SPIEGELBAL -->
-  <section class="scene" id="s-speaker"><canvas class="fx" id="fx-speaker" width="1920" height="1080"></canvas></section>
   <section class="scene" id="s-disco"><canvas class="fx" id="fx-disco" width="1920" height="1080"></canvas></section>
 
   <!-- MARQUEE -->
@@ -419,7 +418,7 @@ body.nocursor{cursor:none}
       <kbd>1–9</kbd><span>Spring naar scène</span>
       <kbd>W N C</kbd><span>Speakermuur · Nacho's · Countdown</span>
       <kbd>G V</kbd><span>Rum-glas · Vinyl</span>
-      <kbd>A S O</kbd><span>Affiche · Speaker · Spiegelbal</span>
+      <kbd>A O</kbd><span>Affiche · Spiegelbal</span>
       <kbd>I L</kbd><span>DJ-intro · Last call</span>
       <kbd>← →</kbd><span>Vorige / volgende</span>
       <kbd>SPATIE</kbd><span>Pauze (blijf op scène)</span>
@@ -456,9 +455,9 @@ const DRANK = [['Frisdrank','2.00'],['Water','1.50'],['Pintje','2.00',true],['Pi
 const FOOD  = [["Nacho's",'7.00'],['Chips','2.00']];
 // [scène, seconden]
 // hoe lang elke scène blijft staan (seconden, wordt korter naarmate de avond drukker wordt)
-const DUR = {intro:7, lastcall:18, affiche:35, speaker:35, disco:38, rumglass:35, vinyl:38, now:35, lineup:22, prijs:18, baco:15, nachos:15, marquee:28, logo:35, halftone:40, glitch:30, viz:45, wall:35, countdown:20};
+const DUR = {intro:7, lastcall:18, affiche:35, disco:38, rumglass:35, vinyl:38, now:35, lineup:22, prijs:18, baco:15, nachos:15, marquee:28, logo:35, halftone:40, glitch:30, viz:45, wall:35, countdown:20};
 // kans dat een scène gekozen wordt: [rustig begin van de avond, piek]
-const WEIGHT = {affiche:[1.2,1.1], speaker:[1,1.5], disco:[1,1.3], rumglass:[1.1,1], vinyl:[1.1,1.3], lineup:[1.3,1.1], prijs:[.25,.12], baco:[.22,.15], nachos:[.22,.15], marquee:[1,1.1], logo:[1.2,1], halftone:[1.2,1.4], glitch:[1,1.5], viz:[1.2,1.8], wall:[1,1.5]};
+const WEIGHT = {affiche:[1.2,1.1], disco:[1,1.3], rumglass:[1.1,1], vinyl:[1.1,1.3], lineup:[1.3,1.1], prijs:[.25,.12], baco:[.22,.15], nachos:[.22,.15], marquee:[1,1.1], logo:[1.2,1], halftone:[1.2,1.4], glitch:[1,1.5], viz:[1.2,1.8], wall:[1,1.5]};
 // "reclame": komt max. 1 keer per 7 scènes
 const ADS = ['prijs','baco','nachos'];
 const BAR_CLOSE = '03:30';   // last call vanaf 20 min ervoor
@@ -771,7 +770,7 @@ function tickGlitch(t){
 }
 /* ---- FX ---- */
 const FX = {};
-['rumglass','vinyl','speaker','disco'].forEach(k => FX[k] = $('#fx-'+k).getContext('2d'));
+['rumglass','vinyl','disco'].forEach(k => FX[k] = $('#fx-'+k).getContext('2d'));
 const CREAM = '#F0EDE4', NEON = '#E0FF00';
 const ener = () => +getComputedStyle(root).getPropertyValue('--energy') || .5;
 // 2. rum-glas (echte halftone-glas + bubbels + zonnestralen)
@@ -875,38 +874,6 @@ function drawVinyl(t, dt){
   c.fillStyle = CREAM; c.beginPath(); c.arc(ax, ay, 42, 0, 6.2832); c.fill(); c.fillStyle = '#151515'; c.beginPath(); c.arc(ax, ay, 16, 0, 6.2832); c.fill();
   c.fillStyle = NEON; c.save(); c.translate(tip.x, tip.y); c.rotate(-.7); c.fillRect(-34,-16,68,32); c.restore();
 }
-// 4. halftone-speaker die uitslaat
-let SPK = null;
-(() => { const img = new Image(); img.onload = () => {
-  const H = 960, W = Math.round(img.width * H / img.height), S = 12;
-  const oc = document.createElement('canvas'); oc.width = W; oc.height = H; const o = oc.getContext('2d'); o.drawImage(img,0,0,W,H);
-  const d = o.getImageData(0,0,W,H).data, pts = [];
-  for (let cy = 0; cy < H; cy += S) for (let cx = 0; cx < W; cx += S){
-    let a = 0, l = 0, n = 0;
-    for (let y = cy; y < Math.min(cy+S,H); y += 2) for (let x = cx; x < Math.min(cx+S,W); x += 2){ const k = (y*W+x)*4; a += d[k+3]/255; l += (d[k]/255) * d[k+3]/255; n++; }
-    a /= n; l /= n; if (a < .1) continue;
-    pts.push([cx + S/2 - W/2, cy + S/2 - H/2, Math.min(1, l * 1.05)]);
-  }
-  SPK = {pts, S, W, H, woof: [ -W*.08, H*.16 ], tw: [ -W*.06, -H*.18 ], cone: W*.32 };
-}; img.src = IMG.speaker; })();
-function drawSpeaker(t, dt){
-  const c = FX.speaker, e = ener(); c.clearRect(0,0,1920,1080); if (!SPK) return;
-  const age = t - lastKick, wave = age * .55, wf = Math.max(0, 1 - age/520);
-  c.save(); c.translate(1000, 545); c.rotate(-.07 + Math.sin(t*.0005)*.015);
-  const p = new Path2D(), pn = new Path2D();
-  for (const [x,y,v] of SPK.pts){
-    const dw = Math.hypot(x - SPK.woof[0], y - SPK.woof[1]), dtw = Math.hypot(x - SPK.tw[0], y - SPK.tw[1]);
-    const inCone = dw < SPK.cone ? 1 - dw/SPK.cone : 0;
-    const ring = wf * Math.exp(-(((dw - wave)/34)**2));
-    const push = 1 + inCone * beat * e * .55 + ring * .6 + (dtw < SPK.cone*.45 ? snare * .25 : 0);
-    const r = SPK.S * .5 * Math.sqrt(v) * push;
-    if (r < .5) continue;
-    const ox = (x - SPK.woof[0]) * inCone * beat * e * .05, oy = (y - SPK.woof[1]) * inCone * beat * e * .05;
-    (ring > .45 ? pn : p).moveTo(x+ox+r, y+oy); (ring > .45 ? pn : p).arc(x+ox, y+oy, Math.min(r, SPK.S*.62), 0, 6.2832);
-  }
-  c.fillStyle = 'rgba(240,237,228,.92)'; c.fill(p); c.fillStyle = NEON; c.fill(pn);
-  c.restore();
-}
 // 5. spiegelbal van halftone-vakjes
 const SPOTS = Array.from({length: 60}, (_, i) => ({a: Math.random()*6.2832, el: (Math.random()-.5)*1.2, n: i % 9 === 0}));
 function drawDisco(t, dt){
@@ -962,7 +929,6 @@ function loop(t){
   if (current === 'halftone') drawHT(t);
   if (current === 'rumglass') drawRumGlass(t, dt);
   if (current === 'vinyl') drawVinyl(t, dt);
-  if (current === 'speaker') drawSpeaker(t, dt);
   if (current === 'disco') drawDisco(t, dt);
   if (current === 'viz') drawViz(t);
   if (current === 'glitch') tickGlitch(t);
@@ -984,7 +950,6 @@ addEventListener('keydown', e => {
   else if (k === 'w') jump('wall');
   else if (k === 'g') jump('rumglass');
   else if (k === 'a') jump('affiche');
-  else if (k === 's') jump('speaker');
   else if (k === 'o') jump('disco');
   else if (k === 'l') jump('lastcall');
   else if (k === 'i') jump('intro');
