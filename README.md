@@ -19,4 +19,4 @@ De volgorde is willekeurig en vooral visuals; prijslijst, BACO, nacho's en line-
 ## Nieuw
 - `A` Affiche in beweging · `O` Spiegelbal
 - `I` DJ-intro (komt automatisch bij elke DJ-wissel) · `L` Last call (komt automatisch 03:10–03:30)
-- Na 04:00 blijft alles gewoon draaien (overtime: Kikker blijft "on air").
+- Na 04:00 blijft alles gewoon draaien (overtime: Kikker B2B Catch blijft "on air").
